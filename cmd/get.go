@@ -1,0 +1,31 @@
+package cmd
+
+import (
+	"errors"
+	"fmt"
+	"github.com/spf13/cobra"
+)
+
+var getCmd = &cobra.Command{
+	Use:   "get <key>",
+	Short: "Send GetItem command",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("missing key")
+		}
+
+		if len(args) > 1 {
+			return fmt.Errorf("required 1 argument, got: %d", len(args))
+		}
+
+		client, err := NewClient()
+		cobra.CheckErr(err)
+
+		return client.GetItem(cmd.Context(), args[0])
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(getCmd)
+
+}
