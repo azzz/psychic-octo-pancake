@@ -12,7 +12,7 @@ func TestList_Push(t *testing.T) {
 	l.Push(8)
 	l.Push(15)
 
-	assert.Equal(t, []int{4, 8, 15}, l.CollectValues())
+	assert.Equal(t, []int{4, 8, 15}, l.Values())
 }
 
 func TestList_Unshift(t *testing.T) {
@@ -21,7 +21,7 @@ func TestList_Unshift(t *testing.T) {
 	l.Unshift(8)
 	l.Unshift(15)
 
-	assert.Equal(t, []int{15, 8, 4}, l.CollectValues())
+	assert.Equal(t, []int{15, 8, 4}, l.Values())
 }
 
 func TestList_Nth(t *testing.T) {
@@ -47,25 +47,25 @@ func TestList_Nth(t *testing.T) {
 
 }
 
-func TestList_Collect(t *testing.T) {
+func TestList_Values(t *testing.T) {
 	t.Run("empty list", func(t *testing.T) {
 		l := New[int]()
 
-		assert.Zero(t, l.CollectValues())
+		assert.Zero(t, l.Values())
 	})
 
 	t.Run("single element", func(t *testing.T) {
 		l := New[int](4)
 
 		expected := []int{4}
-		assert.Equal(t, expected, l.CollectValues())
+		assert.Equal(t, expected, l.Values())
 	})
 
 	t.Run("many elenments", func(t *testing.T) {
 		l := New[int](4, 8, 15, 16, 23, 42)
 
 		expected := []int{4, 8, 15, 16, 23, 42}
-		assert.Equal(t, expected, l.CollectValues())
+		assert.Equal(t, expected, l.Values())
 	})
 }
 
@@ -73,36 +73,36 @@ func TestList_Delete(t *testing.T) {
 	t.Run("empty list", func(t *testing.T) {
 		l := New[int]()
 		assert.False(t, l.Delete(42))
-		assert.Zero(t, l.CollectValues())
+		assert.Zero(t, l.Values())
 	})
 
 	t.Run("n is bigger then list size", func(t *testing.T) {
 		l := New[int](4, 8, 15, 16, 23, 42)
 		assert.False(t, l.Delete(33))
-		assert.Equal(t, []int{4, 8, 15, 16, 23, 42}, l.CollectValues())
+		assert.Equal(t, []int{4, 8, 15, 16, 23, 42}, l.Values())
 	})
 
 	t.Run("n is negative", func(t *testing.T) {
 		l := New[int](4, 8, 15, 16, 23, 42)
 		assert.False(t, l.Delete(-33))
-		assert.Equal(t, []int{4, 8, 15, 16, 23, 42}, l.CollectValues())
+		assert.Equal(t, []int{4, 8, 15, 16, 23, 42}, l.Values())
 	})
 
 	t.Run("delete first", func(t *testing.T) {
 		l := New[int](4, 8, 15, 16, 23, 42)
 		assert.True(t, l.Delete(0))
-		assert.Equal(t, []int{8, 15, 16, 23, 42}, l.CollectValues())
+		assert.Equal(t, []int{8, 15, 16, 23, 42}, l.Values())
 	})
 
 	t.Run("delete last", func(t *testing.T) {
 		l := New[int](4, 8, 15, 16, 23, 42)
 		assert.True(t, l.Delete(5))
-		assert.Equal(t, []int{4, 8, 15, 16, 23}, l.CollectValues())
+		assert.Equal(t, []int{4, 8, 15, 16, 23}, l.Values())
 	})
 
 	t.Run("delete in the middle", func(t *testing.T) {
 		l := New[int](4, 8, 15, 16, 23, 42)
 		assert.True(t, l.Delete(2))
-		assert.Equal(t, []int{4, 8, 16, 23, 42}, l.CollectValues())
+		assert.Equal(t, []int{4, 8, 16, 23, 42}, l.Values())
 	})
 }

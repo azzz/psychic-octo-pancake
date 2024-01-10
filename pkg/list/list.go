@@ -1,18 +1,5 @@
 package list
 
-type Node[V any] struct {
-	next  *Node[V]
-	value V
-}
-
-func (n *Node[V]) Value() V {
-	return n.value
-}
-
-func (n *Node[V]) Next() *Node[V] {
-	return n.next
-}
-
 // List implements a singly linked list.
 type List[V any] struct {
 	len  int
@@ -32,9 +19,9 @@ func (l List[V]) Iter() Iterator[V] {
 	return Iterator[V]{head: l.head, idx: -1}
 }
 
-// CollectValues yields the list as a slice of values.
+// Values yields the list as a slice of values.
 // The list cannot be mutated through the slice.
-func (l *List[V]) CollectValues() []V {
+func (l *List[V]) Values() []V {
 	if l.len == 0 {
 		return nil
 	}
@@ -114,4 +101,8 @@ func (l *List[V]) Delete(n int) bool {
 	prev.next = l.Nth(n + 1)
 
 	return true
+}
+
+func (l *List[V]) Len() int {
+	return l.len
 }
