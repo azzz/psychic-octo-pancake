@@ -11,6 +11,9 @@ var getAllCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := client.New(config.AmqpUrl, config.AmqpQueue)
 		cobra.CheckErr(err)
+		defer func() {
+			logErr(c.Close(), "close client connections")
+		}()
 
 		return c.GetAllItems(cmd.Context())
 	},

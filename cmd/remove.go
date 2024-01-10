@@ -22,6 +22,9 @@ var removeCmd = &cobra.Command{
 
 		c, err := client.New(config.AmqpUrl, config.AmqpQueue)
 		cobra.CheckErr(err)
+		defer func() {
+			logErr(c.Close(), "close client connections")
+		}()
 
 		return c.RemoveItem(cmd.Context(), args[0])
 	},
