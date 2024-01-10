@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/azzz/pillow/internal/client"
 	"github.com/spf13/cobra"
 )
 
@@ -8,10 +9,10 @@ var getAllCmd = &cobra.Command{
 	Use:   "get-all <key>",
 	Short: "Send GetAllItems command",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := NewClient()
+		c, err := client.New(config.AmqpUrl, config.AmqpQueue)
 		cobra.CheckErr(err)
 
-		return client.GetAllItems(cmd.Context())
+		return c.GetAllItems(cmd.Context())
 	},
 }
 

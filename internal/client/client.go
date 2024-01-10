@@ -24,11 +24,55 @@ type Message struct {
 
 type Client struct {
 	queue amqp091.Queue
+	conn  *amqp091.Connection
 	ch    *amqp091.Channel
 }
 
-func New(queue amqp091.Queue, ch *amqp091.Channel) *Client {
-	return &Client{queue: queue, ch: ch}
+func (c Client) Close() error {
+	var errs []error
+
+	if c.ch != nil {
+		if err := c.ch.Close(); err != nil {
+			errs = append(errs, fmt.Errorf("cloe channel: %w", err))
+		}
+	}
+
+	if c.conn != nil {
+		if err := c.conn.Close(); err != nil {
+			errs = append(errs, fmt.Errorf("close connection: %w", err))
+		}
+	}
+
+	if len(errs) > 0 {
+		return errs[0]
+	}
+	return nil
+}
+
+func New(url, queue string) (*Client, error) {
+	var (
+		err    error
+		client = &Client{}
+	)
+
+	client.conn, err = amqp091.Dial(url)
+	if err != nil {
+		return nil, fmt.Errorf("dial: %w", err)
+	}
+
+	client.ch, err = client.conn.Channel()
+	if err != nil {
+		_ = client.Close()
+		return nil, fmt.Errorf("open channel: %w", err)
+	}
+
+	client.queue, err = client.ch.QueueDeclare(queue, false, false, false, false, nil)
+	if err != nil {
+		_ = client.Close()
+		return nil, fmt.Errorf("declare queue: %w", err)
+	}
+
+	return client, nil
 }
 
 func (c Client) AddItem(ctx context.Context, key, value string) error {

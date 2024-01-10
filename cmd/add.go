@@ -6,6 +6,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/azzz/pillow/internal/client"
 
 	"github.com/spf13/cobra"
 )
@@ -22,10 +23,10 @@ var addCmd = &cobra.Command{
 			return fmt.Errorf("required 2 arguments, got: %d", len(args))
 		}
 
-		client, err := NewClient()
+		c, err := client.New(config.AmqpUrl, config.AmqpQueue)
 		cobra.CheckErr(err)
 
-		return client.AddItem(cmd.Context(), args[0], args[1])
+		return c.AddItem(cmd.Context(), args[0], args[1])
 	},
 }
 
