@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/azzz/pillow/internal/omap"
+	"github.com/azzz/psychic-octo-pancake/internal/omap"
 	"github.com/google/uuid"
 	"github.com/rabbitmq/amqp091-go"
 	"io"

@@ -1,4 +1,4 @@
-module github.com/azzz/pillow
+module github.com/azzz/psychic-octo-pancake
 
 go 1.21
 

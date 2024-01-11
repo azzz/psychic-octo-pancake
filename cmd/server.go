@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/azzz/pillow/internal/datalog"
-	"github.com/azzz/pillow/internal/server"
+	"github.com/azzz/psychic-octo-pancake/internal/datalog"
+	"github.com/azzz/psychic-octo-pancake/internal/server"
 	"github.com/spf13/cobra"
 	"os"
 	"os/signal"

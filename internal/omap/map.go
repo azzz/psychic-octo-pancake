@@ -1,7 +1,7 @@
 package omap
 
 import (
-	"github.com/azzz/pillow/internal/list"
+	"github.com/azzz/psychic-octo-pancake/internal/list"
 	"sync"
 )
 

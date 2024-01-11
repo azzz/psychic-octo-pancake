@@ -2,7 +2,7 @@ package server
 
 import (
 	"bytes"
-	"github.com/azzz/pillow/internal/omap"
+	"github.com/azzz/psychic-octo-pancake/internal/omap"
 	"strings"
 	"testing"
 

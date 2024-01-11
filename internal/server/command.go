@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/azzz/pillow/internal/omap"
+	"github.com/azzz/psychic-octo-pancake/internal/omap"
 	"io"
 )
 

@@ -2,8 +2,8 @@ package test
 
 import (
 	"context"
-	"github.com/azzz/pillow/internal/client"
-	"github.com/azzz/pillow/internal/server"
+	"github.com/azzz/psychic-octo-pancake/internal/client"
+	"github.com/azzz/psychic-octo-pancake/internal/server"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

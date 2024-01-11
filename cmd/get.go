@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/azzz/pillow/internal/client"
+	"github.com/azzz/psychic-octo-pancake/internal/client"
 	"github.com/spf13/cobra"
 )
 
