@@ -48,8 +48,14 @@ func initConfig() {
 	// write default config file
 	if err := viper.ReadInConfig(); err != nil {
 		logger.Printf("INFO: config file not found, create a default one")
-		viper.Set("amqp_url", "amqp://root:password@localhost:5672/")
+
+		// I suppose it's fine to pre-hardcode default AMQP URL and Queue name for a while
+		// instead of running a sort of initializing wizzard.\
+		// RabbitMQ URL
+		viper.Set("amqp_url", "amqp://guest:guest@localhost:5672/")
+		// Queue name to send commands to a server
 		viper.Set("amqp_queue", "command_requests")
+		// Server data file to write commands output
 		viper.Set("data-file", path.Join(".", "data.log"))
 
 		cobra.CheckErr(viper.SafeWriteConfig())

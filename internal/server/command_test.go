@@ -17,13 +17,13 @@ func TestAddItemCommand_Exec(t *testing.T) {
 	store := newStore()
 	cmd := AddItemCommand{store}
 	assert.NoError(t, cmd.Exec(Message{Key: "Batman", Value: "DC"}))
-	assert.NoError(t, cmd.Exec(Message{Key: "IronMan", Value: "Marvell"}))
+	assert.NoError(t, cmd.Exec(Message{Key: "IronMan", Value: "Marvel"}))
 
 	got1, _ := store.Get("Batman")
 	assert.Equal(t, "DC", got1)
 
 	got2, _ := store.Get("IronMan")
-	assert.Equal(t, "Marvell", got2)
+	assert.Equal(t, "Marvel", got2)
 }
 
 func TestRemoveItemCommand_Exec(t *testing.T) {
@@ -45,7 +45,7 @@ func TestRemoveItemCommand_Exec(t *testing.T) {
 func TestGetItemCommand_Exec(t *testing.T) {
 	store := newStore()
 	store.Set("Batman", "DC")
-	store.Set("SpiderMan", "Marvell")
+	store.Set("SpiderMan", "Marvel")
 	buf := bytes.NewBufferString("")
 
 	cmd := GetItemCommand{buf, store}
@@ -59,13 +59,13 @@ func TestGetItemCommand_Exec(t *testing.T) {
 func TestGetAllCommand_Exec(t *testing.T) {
 	store := newStore()
 	store.Set("Batman", "DC")
-	store.Set("SpiderMan", "Marvell")
+	store.Set("SpiderMan", "Marvel")
 	buf := bytes.NewBufferString("")
 
 	cmd := GetAllCommand{buf, store}
 	assert.NoError(t, cmd.Exec(Message{}))
 	assert.Equalf(t, []string{"Batman", "SpiderMan"}, store.Keys(), "log is not expected to be changed")
 
-	lines := []string{`"Batman":"DC"`, `"SpiderMan":"Marvell"`, ""}
+	lines := []string{`"Batman":"DC"`, `"SpiderMan":"Marvel"`, ""}
 	assert.Equal(t, strings.Join(lines, "\n"), buf.String())
 }

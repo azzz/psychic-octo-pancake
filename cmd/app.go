@@ -8,6 +8,6 @@ type Config struct {
 
 func logErr(err error, extra string) {
 	if err != nil {
-		logger.Printf("ERROR: %s: %w", extra, err)
+		logger.Printf("ERROR: %s: %s", extra, err)
 	}
 }

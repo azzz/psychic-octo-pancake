@@ -1,4 +1,4 @@
-package eventslog
+package datalog
 
 import (
 	"fmt"
@@ -7,9 +7,8 @@ import (
 	"syscall"
 )
 
-// File implements a file-base events log safe for concurrency use
-// File opens a given file exclusively and locks it from other processes to guarantee
-// that only the server will write consistent data.
+// File implements a file-base data log safe for concurrency use
+// File opens file and locks it exclusively.
 type File struct {
 	file *os.File
 	sync.Mutex

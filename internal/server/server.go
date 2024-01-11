@@ -100,27 +100,25 @@ func (s Server) Start(ctx context.Context) error {
 			return nil
 		case <-ctx.Done():
 			return ctx.Err()
-		case delivery := <-updates:
+		case upd := <-updates:
 			traceId, _ := uuid.NewUUID()
+			err := s.handle(upd.Body)
+			s.logger.Printf("INFO: traceid=%s: received message", traceId)
 
-			go func(d amqp091.Delivery, traceId string) {
-				err := s.handle(d.Body)
-				s.logger.Printf("INFO: traceid=%s: received message", traceId)
-				if err == nil {
-					if err := d.Ack(false); err != nil {
-						s.logger.Printf("WARN: traceid=%s: ack message: %s", err)
-					}
-					return
+			if err == nil {
+				if err := upd.Ack(false); err != nil {
+					s.logger.Fatalf("FATAL: traceid=%s: ack message: %s", traceId, err)
 				}
+				break
+			}
 
-				if !errors.Is(err, ValueNotFoundErr) {
-					s.logger.Printf("WARN: traceid=%s: handle message: %s", err)
-				}
+			if !errors.Is(err, ValueNotFoundErr) {
+				s.logger.Printf("WARN: traceid=%s: handle message: %s", traceId, err)
+			}
 
-				if err := d.Reject(false); err != nil {
-					s.logger.Printf("WARN: traceid=%s: reject message: %s", err)
-				}
-			}(delivery, traceId.String())
+			if err := upd.Reject(false); err != nil {
+				s.logger.Fatalf("FATAL: traceid=%s: reject message: %s", traceId, err)
+			}
 		}
 	}
 }

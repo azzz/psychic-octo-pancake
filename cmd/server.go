@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/azzz/pillow/internal/eventslog"
+	"github.com/azzz/pillow/internal/datalog"
 	"github.com/azzz/pillow/internal/server"
 	"github.com/spf13/cobra"
 	"os"
@@ -20,12 +20,12 @@ var serverCmd = &cobra.Command{
 			signal.Stop(sig)
 		}()
 
-		elog, err := eventslog.Open(config.DataFile)
+		elog, err := datalog.Open(config.DataFile)
 		if err != nil {
 			return fmt.Errorf("open file storage: %w", err)
 		}
 		defer func() {
-			logErr(elog.Close(), "close eventslog")
+			logErr(elog.Close(), "close datalog")
 		}()
 
 		srv, err := server.New(config.AmqpUrl, config.AmqpQueue, elog)
@@ -40,7 +40,7 @@ var serverCmd = &cobra.Command{
 			case <-sig:
 				logger.Printf("INFO: handle CTL+C gracefully")
 				if err := srv.Stop(); err != nil {
-					logger.Printf("ERROR: stop server: %w", err)
+					logger.Printf("ERROR: stop server: %s", err)
 				}
 			}
 		}()
