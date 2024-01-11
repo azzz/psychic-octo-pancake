@@ -1,10 +1,9 @@
-package test
+package tests
 
 import (
 	"context"
 	"github.com/azzz/psychic-octo-pancake/internal/client"
 	"github.com/azzz/psychic-octo-pancake/internal/server"
-	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"io"
@@ -32,10 +31,6 @@ func amqpQueue() string {
 }
 
 func setup(dataLog io.Writer) (*server.Server, *client.Client) {
-	if err := godotenv.Load("../.env.test.env"); err != nil {
-		log.Fatalf("load .env.test.env: %s", err)
-	}
-
 	srv, err := server.New(amqpUrl(), amqpQueue(), dataLog)
 	if err != nil {
 		log.Fatalf("create server: %s", err)
