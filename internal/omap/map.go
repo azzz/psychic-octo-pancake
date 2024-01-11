@@ -1,7 +1,7 @@
 package omap
 
 import (
-	"github.com/azzz/pillow/pkg/list"
+	"github.com/azzz/pillow/internal/list"
 	"sync"
 )
 
@@ -10,7 +10,7 @@ type Pair[K, V any] struct {
 	Value V
 }
 
-// OMap is like a Go ma[K]V map but ordered and safe for concurency use.
+// OMap is like a Go ma[K]V map but ordered and safe for concurrency use.
 // Ordered map means the values can be indexed by key, by index in the order they were set,
 // or iterated in the order.
 type OMap[K comparable, V any] struct {
@@ -20,8 +20,8 @@ type OMap[K comparable, V any] struct {
 	store map[K]V
 }
 
-func New[K comparable, V any]() OMap[K, V] {
-	return OMap[K, V]{
+func New[K comparable, V any]() *OMap[K, V] {
+	return &OMap[K, V]{
 		RWMutex: &sync.RWMutex{},
 		keys:    list.New[K](),
 		store:   make(map[K]V),
@@ -79,7 +79,7 @@ func (m *OMap[K, V]) Keys() []K {
 	return m.keys.Values()
 }
 
-// Pairs return ordered Key-Value pairs.
+// Pairs return ordered key-value pairs.
 func (m *OMap[K, V]) Pairs() []Pair[K, V] {
 	m.RLock()
 	defer m.RUnlock()

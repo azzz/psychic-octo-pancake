@@ -25,7 +25,7 @@ func TestOMap_Get(t *testing.T) {
 
 	type testCase struct {
 		name  string
-		m     OMap[string, int]
+		m     *OMap[string, int]
 		args  args
 		want  int
 		want1 bool
@@ -74,7 +74,7 @@ func TestOMap_Nth(t *testing.T) {
 	}
 	type testCase struct {
 		name  string
-		m     OMap[string, int]
+		m     *OMap[string, int]
 		args  args
 		want  int
 		want1 bool
@@ -120,7 +120,7 @@ func TestOMap_Keys(t *testing.T) {
 
 	type testCase struct {
 		name string
-		m    OMap[string, int]
+		m    *OMap[string, int]
 		want []string
 	}
 	tests := []testCase{
@@ -143,7 +143,7 @@ func TestOMap_Keys(t *testing.T) {
 	}
 }
 
-func newMap() OMap[string, int] {
+func newMap() *OMap[string, int] {
 	return New[string, int]()
 }
 
@@ -154,7 +154,7 @@ func TestOMap_Pairs(t *testing.T) {
 
 	type testCase struct {
 		name string
-		m    OMap[string, int]
+		m    *OMap[string, int]
 		want []Pair[string, int]
 	}
 	tests := []testCase{
