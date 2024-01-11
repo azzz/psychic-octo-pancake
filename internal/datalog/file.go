@@ -12,8 +12,6 @@ import (
 type File struct {
 	file *os.File
 	sync.Mutex
-
-	someUbused bool
 }
 
 func (f *File) Write(p []byte) (n int, err error) {
