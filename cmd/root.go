@@ -16,8 +16,8 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "pillow",
-	Short: "Pillow is a client-server application where server listens to a queue and client sends commands",
+	Use:   "psychic-octo-pancake",
+	Short: "psychic-octo-pancake is a consumer/produces application with a queue",
 	Run:   func(cmd *cobra.Command, args []string) {},
 }
 
@@ -41,7 +41,7 @@ func printDebug() {
 }
 
 func initConfig() {
-	viper.SetConfigName("pillow")
+	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath(".")
 

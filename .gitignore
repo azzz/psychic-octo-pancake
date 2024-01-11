@@ -1,4 +1,4 @@
 /.vscode
 /.idea
-/pillow.toml
+/config.toml
 /data.log
