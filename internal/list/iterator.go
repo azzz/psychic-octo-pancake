@@ -3,9 +3,7 @@ package list
 type Iterator[V any] struct {
 	head    *Node[V] // should be initialized in the list beginning and changes on each Next()
 	current *Node[V] // current node, nil on start and changes on each after Next()
-	idx     int
-	len     int // total len
-	started bool
+	idx     int      // current element ID
 }
 
 // Next moves iterator next.

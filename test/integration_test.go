@@ -54,8 +54,9 @@ func Test(t *testing.T) {
 	ctx := context.Background()
 
 	srv, client := setup(dataLog)
-	defer srv.Stop()
-	defer client.Close()
+	defer func() { _ = srv.Stop() }()
+
+	defer func() { _ = client.Close() }()
 
 	go func() {
 		if err := srv.Start(ctx); err != nil {
