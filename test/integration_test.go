@@ -50,6 +50,10 @@ func setup(dataLog io.Writer) (*server.Server, *client.Client) {
 }
 
 func Test(t *testing.T) {
+	if os.Getenv("INTEGRATION_TESTS") != "1" {
+		t.Skip("Skip integrations tests. Use INTEGRATION_TESTS=1 env var to run them.")
+	}
+
 	dataLog := NewMemLog()
 	ctx := context.Background()
 
