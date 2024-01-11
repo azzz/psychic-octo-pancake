@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/azzz/pillow/internal/omap"
+	"github.com/google/uuid"
 	"github.com/rabbitmq/amqp091-go"
 	"io"
 	"log"
@@ -60,16 +61,20 @@ func New(url, queue string, elog io.Writer) (*Server, error) {
 }
 
 func (s Server) Stop() error {
+	s.logger.Print("INFO: stop the server")
+
 	close(s.stop)
 	var errs []error
 
 	if s.ch != nil {
+		s.logger.Print("INFO: close AMQP channel")
 		if err := s.ch.Close(); err != nil {
 			errs = append(errs, fmt.Errorf("cloe channel: %w", err))
 		}
 	}
 
 	if s.conn != nil {
+		s.logger.Print("INFO: close AMQP connection")
 		if err := s.conn.Close(); err != nil {
 			errs = append(errs, fmt.Errorf("close connection: %w", err))
 		}
@@ -82,6 +87,7 @@ func (s Server) Stop() error {
 }
 
 func (s Server) Start(ctx context.Context) error {
+	s.logger.Print("INFO: start the server")
 	updates, err := s.ch.Consume(s.queue.Name, "", false, false, false, false, nil)
 
 	if err != nil {
@@ -91,30 +97,30 @@ func (s Server) Start(ctx context.Context) error {
 	for {
 		select {
 		case <-s.stop:
-			s.logger.Printf("shut down...")
 			return nil
 		case <-ctx.Done():
 			return ctx.Err()
 		case delivery := <-updates:
-			go func(d amqp091.Delivery) {
-				err := s.handle(d.Body)
+			traceId, _ := uuid.NewUUID()
 
+			go func(d amqp091.Delivery, traceId string) {
+				err := s.handle(d.Body)
+				s.logger.Printf("INFO: traceid=%s: received message", traceId)
 				if err == nil {
-					s.logger.Printf("DEBUG: success")
 					if err := d.Ack(false); err != nil {
-						s.logger.Printf("ERROR: ack message: %s", err)
+						s.logger.Printf("WARN: traceid=%s: ack message: %s", err)
 					}
 					return
 				}
 
 				if !errors.Is(err, ValueNotFoundErr) {
-					s.logger.Printf("ERROR: handle message: %s", err)
+					s.logger.Printf("WARN: traceid=%s: handle message: %s", err)
 				}
 
 				if err := d.Reject(false); err != nil {
-					s.logger.Printf("ERROR: reject message: %s", err)
+					s.logger.Printf("WARN: traceid=%s: reject message: %s", err)
 				}
-			}(delivery)
+			}(delivery, traceId.String())
 		}
 	}
 }

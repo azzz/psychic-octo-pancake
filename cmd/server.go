@@ -36,11 +36,11 @@ var serverCmd = &cobra.Command{
 		go func() {
 			select {
 			case <-cmd.Context().Done():
-				logger.Printf("CLI dead by context")
+				logger.Printf("ERROR: CLI dead by context")
 			case <-sig:
-				logger.Printf("Handling CTL+C gracefully")
+				logger.Printf("INFO: handle CTL+C gracefully")
 				if err := srv.Stop(); err != nil {
-					logger.Printf("Cannot stop server: %w", err)
+					logger.Printf("ERROR: stop server: %w", err)
 				}
 			}
 		}()
