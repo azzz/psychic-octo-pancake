@@ -13,6 +13,16 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+
+    services:
+      rabbitmq:
+        image: rabbitmq:latest
+        env:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
+        ports:
+          - 5672
+
     steps:
     - uses: actions/checkout@v3
 
@@ -24,5 +34,8 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Unit Test
-      run: go test -v -race ./... -v
+    - name: Unit Tests
+      run: make unit-tests
+
+    - name: Integration Tests
+      run: make integration-tests
